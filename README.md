@@ -1,1 +1,35 @@
-# twitter-functionality-clone-react
+# TWITTER FUNCTIONALITY CLONE REACT APP
+
+## Deployment
+
+### [Deployed  at Vercel  🔗](https://twitter-functionality-clone-react.vercel.app/)
+
+## Description
+
+This is a twitter functionality clone app built using React. It has the following features:
+- You can tweet ✉️
+- You can like and dislike a tweet ❤️💔
+- You can edit a tweet ✏️
+- You can delete a tweet 🗑️
+- You can add images to a tweet (optional | url of the image)🖼️
+
+## Local Setup
+
+### 1. Clone the repo 
+```bash
+git clone https://github.com/irahuldutta02/twitter-functionality-clone-react
+```
+### 2. Install dependencies
+
+```bash
+npm install
+```
+### 3. Start the development server
+
+```bash
+npm start
+```
+
+## Tech Stack
+
+- React
