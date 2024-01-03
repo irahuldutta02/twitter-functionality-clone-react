@@ -41,13 +41,51 @@ const initialTwits = [
 ];
 
 const MemoizedNewTwit = memo(NewTwit);
+const MemoizedTwitList = memo(TwitList);
 
 export function Twitter() {
   const [twits, setTwits] = useState(initialTwits);
 
-  const handelAddNewTwits = useCallback((content, imageUrl) => {
-    if (content === "") {
-      toast.warn("Empty tweet!", {
+  const handelAddNewTwits = useCallback(
+    (content, imageUrl) => {
+      if (content === "") {
+        toast.warn("Empty tweet!", {
+          position: "bottom-center",
+          autoClose: 1000,
+          hideProgressBar: true,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: 0,
+          theme: "light",
+        });
+        return;
+      }
+      if (imageUrl !== "" && !imageUrl.startsWith("https://")) {
+        toast.warn("Invalid URL!", {
+          position: "bottom-center",
+          autoClose: 1000,
+          hideProgressBar: true,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: 0,
+          theme: "light",
+        });
+        return;
+      }
+
+      const newTwit = {
+        id: getNewTwitId(twits),
+        content: content,
+        imageUrl: imageUrl,
+        likeCount: 0,
+        disLikeCount: 0,
+        timeStamp: new Date().toISOString(),
+        isEdited: false,
+      };
+      setTwits([newTwit, ...twits]);
+      toast.success("Tweeted!", {
         position: "bottom-center",
         autoClose: 1000,
         hideProgressBar: true,
@@ -57,10 +95,54 @@ export function Twitter() {
         progress: 0,
         theme: "light",
       });
-      return;
-    }
-    if (imageUrl !== "" && !imageUrl.startsWith("https://")) {
-      toast.warn("Invalid URL!", {
+    },
+    [twits]
+  );
+
+  const handleLike = useCallback(
+    (id) => {
+      const newTwits = twits.map((twit) => {
+        if (twit.id === id) {
+          return { ...twit, likeCount: twit.likeCount + 1 };
+        }
+        return twit;
+      });
+
+      setTwits(newTwits);
+    },
+    [twits]
+  );
+
+  const handleDisLike = useCallback(
+    (id) => {
+      const newTwits = twits.map((twit) => {
+        if (twit.id === id) {
+          return { ...twit, disLikeCount: twit.disLikeCount + 1 };
+        }
+        return twit;
+      });
+
+      setTwits(newTwits);
+    },
+    [twits]
+  );
+
+  const handelEditing = useCallback(
+    (id, content) => {
+      const newTwits = twits.map((twit) => {
+        if (twit.id === id) {
+          return {
+            ...twit,
+            content: content,
+            isEdited: true,
+            timeStamp: new Date().toISOString(),
+          };
+        }
+        return twit;
+      });
+
+      setTwits(newTwits);
+      toast.success("Tweet Edited!", {
         position: "bottom-center",
         autoClose: 1000,
         hideProgressBar: true,
@@ -70,78 +152,9 @@ export function Twitter() {
         progress: 0,
         theme: "light",
       });
-      return;
-    }
-
-    const newTwit = {
-      id: getNewTwitId(twits),
-      content: content,
-      imageUrl: imageUrl,
-      likeCount: 0,
-      disLikeCount: 0,
-      timeStamp: new Date().toISOString(),
-      isEdited: false,
-    };
-    setTwits([newTwit, ...twits]);
-    toast.success("Tweeted!", {
-      position: "bottom-center",
-      autoClose: 1000,
-      hideProgressBar: true,
-      closeOnClick: true,
-      pauseOnHover: true,
-      draggable: true,
-      progress: 0,
-      theme: "light",
-    });
-  }, []);
-
-  const handleLike = (id) => {
-    const newTwits = twits.map((twit) => {
-      if (twit.id === id) {
-        return { ...twit, likeCount: twit.likeCount + 1 };
-      }
-      return twit;
-    });
-
-    setTwits(newTwits);
-  };
-
-  const handleDisLike = (id) => {
-    const newTwits = twits.map((twit) => {
-      if (twit.id === id) {
-        return { ...twit, disLikeCount: twit.disLikeCount + 1 };
-      }
-      return twit;
-    });
-
-    setTwits(newTwits);
-  };
-
-  const handelEditing = (id, content) => {
-    const newTwits = twits.map((twit) => {
-      if (twit.id === id) {
-        return {
-          ...twit,
-          content: content,
-          isEdited: true,
-          timeStamp: new Date().toISOString(),
-        };
-      }
-      return twit;
-    });
-
-    setTwits(newTwits);
-    toast.success("Tweet Edited!", {
-      position: "bottom-center",
-      autoClose: 1000,
-      hideProgressBar: true,
-      closeOnClick: true,
-      pauseOnHover: true,
-      draggable: true,
-      progress: 0,
-      theme: "light",
-    });
-  };
+    },
+    [twits]
+  );
 
   const handelDelete = useCallback((id) => {
     const newTwits = twits.filter((twit) => twit.id !== id);
@@ -220,7 +233,7 @@ export function Twitter() {
         />
       </div>
       <div className="twits-box">
-        <TwitList
+        <MemoizedTwitList
           twits={twits}
           like={handleLike}
           disLike={handleDisLike}
