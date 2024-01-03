@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useCallback, memo } from "react";
 import { NewTwit } from "./NewTwit";
 import { TwitList } from "./TwitList";
 import { ToastContainer, toast } from "react-toastify";
@@ -40,10 +40,12 @@ const initialTwits = [
   },
 ];
 
+const MemoizedNewTwit = memo(NewTwit);
+
 export function Twitter() {
   const [twits, setTwits] = useState(initialTwits);
 
-  const handelAddNewTwits = (content, imageUrl) => {
+  const handelAddNewTwits = useCallback((content, imageUrl) => {
     if (content === "") {
       toast.warn("Empty tweet!", {
         position: "bottom-center",
@@ -91,7 +93,7 @@ export function Twitter() {
       progress: 0,
       theme: "light",
     });
-  };
+  }, []);
 
   const handleLike = (id) => {
     const newTwits = twits.map((twit) => {
@@ -141,7 +143,7 @@ export function Twitter() {
     });
   };
 
-  const handelDelete = (id) => {
+  const handelDelete = useCallback((id) => {
     const newTwits = twits.filter((twit) => twit.id !== id);
     setTwits(newTwits);
 
@@ -155,9 +157,9 @@ export function Twitter() {
       progress: 0,
       theme: "light",
     });
-  };
+  }, []);
 
-  const handelShowRecent = () => {
+  const handelShowRecent = useCallback(() => {
     twits.sort((a, b) => {
       let aDate = new Date(a.timeStamp).getTime();
       let bDate = new Date(b.timeStamp).getTime();
@@ -174,9 +176,9 @@ export function Twitter() {
       progress: 0,
       theme: "light",
     });
-  };
+  }, []);
 
-  const handleShowOld = () => {
+  const handleShowOld = useCallback(() => {
     twits.sort((a, b) => {
       let aDate = new Date(a.timeStamp).getTime();
       let bDate = new Date(b.timeStamp).getTime();
@@ -193,9 +195,9 @@ export function Twitter() {
       progress: 0,
       theme: "light",
     });
-  };
+  }, []);
 
-  function getNewTwitId(twits) {
+  const getNewTwitId = useCallback((twits) => {
     if (twits.length === 0) return 0;
     let id = 0;
 
@@ -206,12 +208,12 @@ export function Twitter() {
     });
 
     return id + 1;
-  }
+  }, []);
 
   return (
     <div className="main">
       <div className="twit-functionality">
-        <NewTwit
+        <MemoizedNewTwit
           addTwit={handelAddNewTwits}
           showRecent={handelShowRecent}
           showOld={handleShowOld}
