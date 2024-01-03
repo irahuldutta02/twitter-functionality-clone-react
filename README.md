@@ -6,12 +6,17 @@
 
 ## Description
 
-This is a twitter functionality clone app built using React. It has the following features:
+### This is a twitter functionality clone app built using React. It has the following features:
 - You can tweet ✉️
 - You can like and dislike a tweet ❤️💔
 - You can edit a tweet ✏️
 - You can delete a tweet 🗑️
 - You can add images to a tweet (optional | url of the image)🖼️
+
+### FYI
+- The app is not connected to any backend.
+- This is just a React practice project.
+- In this projects I have used react hooks like useState, useCallback, React.memo
 
 ## Local Setup
 
