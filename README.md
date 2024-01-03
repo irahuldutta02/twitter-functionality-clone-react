@@ -4,6 +4,10 @@
 
 ### [Deployed  at Vercel  🔗](https://twitter-functionality-clone-react.vercel.app/)
 
+## Video Preview
+
+https://github.com/irahuldutta02/twitter-functionality-clone-react/assets/78687135/b1313cff-8fe7-4c39-ad51-83cf2467b3dd
+
 ## Description
 
 ### This is a twitter functionality clone app built using React. It has the following features:
