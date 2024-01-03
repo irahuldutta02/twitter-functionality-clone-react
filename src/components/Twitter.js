@@ -156,21 +156,24 @@ export function Twitter() {
     [twits]
   );
 
-  const handelDelete = useCallback((id) => {
-    const newTwits = twits.filter((twit) => twit.id !== id);
-    setTwits(newTwits);
+  const handelDelete = useCallback(
+    (id) => {
+      const newTwits = twits.filter((twit) => twit.id !== id);
+      setTwits(newTwits);
 
-    toast.error("Deleted!", {
-      position: "bottom-center",
-      autoClose: 1000,
-      hideProgressBar: true,
-      closeOnClick: true,
-      pauseOnHover: true,
-      draggable: true,
-      progress: 0,
-      theme: "light",
-    });
-  }, []);
+      toast.error("Deleted!", {
+        position: "bottom-center",
+        autoClose: 1000,
+        hideProgressBar: true,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: 0,
+        theme: "light",
+      });
+    },
+    [twits]
+  );
 
   const handelShowRecent = useCallback(() => {
     twits.sort((a, b) => {
@@ -189,7 +192,7 @@ export function Twitter() {
       progress: 0,
       theme: "light",
     });
-  }, []);
+  }, [twits]);
 
   const handleShowOld = useCallback(() => {
     twits.sort((a, b) => {
@@ -208,20 +211,22 @@ export function Twitter() {
       progress: 0,
       theme: "light",
     });
-  }, []);
+  }, [twits]);
 
-  const getNewTwitId = useCallback((twits) => {
-    if (twits.length === 0) return 0;
-    let id = 0;
+  const getNewTwitId = useCallback(
+    (twits) => {
+      if (twits.length === 0) return 0;
+      let id = 0;
 
-    twits.forEach((twit) => {
-      if (twit.id > id) {
-        id = twit.id;
-      }
-    });
-
-    return id + 1;
-  }, []);
+      twits.forEach((twit) => {
+        if (twit.id > id) {
+          id = twit.id;
+        }
+      });
+      return id + 1;
+    },
+    [twits]
+  );
 
   return (
     <div className="main">
